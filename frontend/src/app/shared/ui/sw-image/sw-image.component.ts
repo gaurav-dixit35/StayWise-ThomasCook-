@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'sw-image', standalone: true,
@@ -13,7 +13,7 @@ import { Component, Input } from '@angular/core';
   `,
   styles: `:host{display:block;position:relative;overflow:hidden;background:#e9e6df}.picture{position:absolute;inset:0;display:block}.picture img{display:block;width:100%;height:100%;object-fit:cover;object-position:var(--image-focus,center);background:#e9e6df}.picture img.failed{visibility:hidden}.fallback{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(145deg,#e9e6df,#f5f3ed);color:#667083}.fallback span{display:grid;place-items:center;width:2.5rem;height:2.5rem;border:1px solid #bdad85;border-radius:50%;font:600 1rem Georgia,serif}`,
 })
-export class SwImageComponent {
+export class SwImageComponent implements OnChanges {
   @Input({ required: true }) src = '';
   @Input() alt = '';
   @Input() focus = 'center';
@@ -22,6 +22,10 @@ export class SwImageComponent {
   @Input() sizes = '100vw';
   @Input() eager = false;
   failed = false;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['src']) this.failed = false;
+  }
 
   get webpSet(): string { return this.srcset('webp'); }
   get jpegSet(): string { return this.srcset('jpg'); }

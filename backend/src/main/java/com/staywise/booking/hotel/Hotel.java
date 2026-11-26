@@ -58,6 +58,9 @@ public class Hotel {
     @Column(name = "image_url", nullable = false, length = 255)
     private String imageUrl;
 
+    @Column(name = "image_alt", nullable = false, length = 255)
+    private String imageAlt;
+
     @Column(name = "image_focus", nullable = false, length = 20)
     private String imageFocus = "center";
 
@@ -82,6 +85,7 @@ public class Hotel {
     public BigDecimal getPricePerNight() { return pricePerNight; }
     public int getTotalRooms() { return totalRooms; }
     public String getImageUrl() { return imageUrl; }
+    public String getImageAlt() { return imageAlt; }
     public String getImageFocus() { return imageFocus; }
     public Set<Amenity> getAmenities() { return Set.copyOf(amenities); }
 

@@ -175,7 +175,7 @@ npm run images:process
 - Browser: booking, confirmation, lookup, and cancellation journey completed in Chrome.
 - Accessibility: axe-core reported **0 violations** on desktop home, search results, and hotel details.
 - Lighthouse: **64 performance, 100 accessibility, 96 best practices, 100 SEO** on the production build in the local static server. The performance target of 85 was not met; the local server does not reproduce production compression, caching, or hosting.
-- Docker/Testcontainers were not available to the Maven test JVM during this pass; the complete integration suite and a fresh database migration could not be verified here.
+- Testcontainers could not connect to the Docker engine. The existing Docker MySQL database was reachable by the app and migrated through V6; a fresh database migration and the complete integration suite could not be verified here.
 - Dependencies: `npm audit --omit=dev` found **0 production vulnerabilities**. Full audit reports **16 moderate development-tool findings** in the Angular CLI dependency tree; npm's suggested remediation downgrades Angular CLI to 16, so it was not applied to this Angular 21 project.
 
 ## Project map

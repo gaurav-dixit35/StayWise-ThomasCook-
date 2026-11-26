@@ -39,8 +39,8 @@ import { SwImageComponent } from '../../shared/ui/sw-image/sw-image.component';
 })
 export class HomePage {
   readonly featured = [
-    { slug: 'sea-glass-house', name: 'Sea Glass House', city: 'Mumbai', alt: 'Sunlit room with a broad window and sitting area' },
-    { slug: 'lakehouse-mewar', name: 'Lakehouse Mewar', city: 'Udaipur', alt: 'Modern guest bedroom in soft daylight' },
-    { slug: 'aravali-palace-heritage', name: 'Aravali Palace Heritage', city: 'Jaipur', alt: 'Jaipur heritage haveli courtyard' },
+    { slug: 'sea-glass-house', name: 'Sea Glass House', city: 'Mumbai', alt: 'Sunlit guest room with a bed, chair and broad window' },
+    { slug: 'lakehouse-mewar', name: 'Lakehouse Mewar', city: 'Udaipur', alt: 'Neatly made bed in a modern hotel room' },
+    { slug: 'aravali-palace-heritage', name: 'Aravali Palace Heritage', city: 'Jaipur', alt: 'Hotel room with a bed, chair and broad window' },
   ];
 }

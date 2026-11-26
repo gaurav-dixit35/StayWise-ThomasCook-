@@ -20,7 +20,7 @@ For each photo, source metadata was checked for the landmark or room subject and
 - Shimla: Unsplash source describes a scenic mountain town in a valley and its page identifies Shimla; Unsplash License, Sujit Mondal.
 - Bengaluru: Commons title identifies Vidhana Soudha facade in Bengaluru; CC BY-SA 4.0, Moheen Reeyad.
 
-All 27 hotel placement sources (subject, page, photographer, and license) are mapped in [CREDITS.md](CREDITS.md), the same records are used to populate the `/credits` page, and the source metadata sidecars are under `frontend/src/assets/images/source/hotels/` locally. Hotel gallery SQL rows carry their own author, source link, and license.
+All 27 hotel placement sources (subject, page, photographer, and license) are mapped in [CREDITS.md](CREDITS.md), the same records are used to populate the `/credits` page, and the source metadata sidecars are under `frontend/src/assets/images/source/hotels/` locally. V6 sets primary-image alt text from each source record and corrects gallery attribution and alt text after V5's initial gallery seed.
 
 ## Asset pipeline
 

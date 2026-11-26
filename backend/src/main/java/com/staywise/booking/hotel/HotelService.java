@@ -63,13 +63,13 @@ public class HotelService {
 
     private HotelSummaryDto summary(Hotel hotel, LocalDate checkIn, LocalDate checkOut) {
         return new HotelSummaryDto(hotel.getId(), hotel.getSlug(), hotel.getName(), hotel.getCity(), hotel.getState(),
-                hotel.getStarRating(), hotel.getDescription(), hotel.getImageUrl(), hotel.getName() + " in " + hotel.getCity(), hotel.getImageFocus(), amenities(hotel),
+                hotel.getStarRating(), hotel.getDescription(), hotel.getImageUrl(), hotel.getImageAlt(), hotel.getImageFocus(), amenities(hotel),
                 hotel.getRoomTypeName(), hotel.getPricePerNight(), availability(hotel, checkIn, checkOut));
     }
 
     private HotelDetailDto detail(Hotel hotel, LocalDate checkIn, LocalDate checkOut) {
         return new HotelDetailDto(hotel.getId(), hotel.getSlug(), hotel.getName(), hotel.getCity(), hotel.getState(),
-                hotel.getAddress(), hotel.getStarRating(), hotel.getDescription(), hotel.getImageUrl(), hotel.getName() + " in " + hotel.getCity(), hotel.getImageFocus(),
+                hotel.getAddress(), hotel.getStarRating(), hotel.getDescription(), hotel.getImageUrl(), hotel.getImageAlt(), hotel.getImageFocus(),
                 hotelImageRepository.findByHotelIdOrderBySortOrder(hotel.getId()).stream().map(image -> new com.staywise.booking.hotel.dto.HotelImageDto(image.getImageUrl(), image.getAltText(), image.getCreditName(), image.getCreditUrl(), image.getLicense())).toList(), amenities(hotel),
                 hotel.getRoomTypeName(), hotel.getPricePerNight(), availability(hotel, checkIn, checkOut));
     }

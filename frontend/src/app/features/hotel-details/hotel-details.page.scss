@@ -52,6 +52,10 @@ h1 { margin: 0; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.08;font-weight
 
 @media (max-width: 1023px) { .details-layout { grid-template-columns: 1fr; gap: 1.5rem; } .booking-card { position: static; } }
 @media (max-width: 767px) {
+  .booking-card { position: fixed; z-index: 50; inset: auto 1rem 1rem; width: auto; max-height: 42vh; overflow-y: auto; }
+  :host { padding-bottom: 20rem; }
+}
+@media (max-width: 767px) {
   .breadcrumbs,.back-results,.hotel-gallery,.details-layout, .page-status { width: calc(100% - 2rem); }
   .hotel-gallery { height:16rem;display:flex;overflow-x:auto;scroll-snap-type:x mandatory; }
   .hotel-gallery button { flex:0 0 86%;scroll-snap-align:start; }
@@ -61,5 +65,5 @@ h1 { margin: 0; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.08;font-weight
   .details-layout { margin-top: 1.5rem; }
   .amenity-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .room-card { align-items: start; flex-direction: column; }
-  .booking-card { position: sticky; z-index: 10; bottom: .5rem; top: auto; padding: .85rem; box-shadow: 0 .35rem 1.4rem rgb(23 36 61 / 18%); }
+  .booking-card { padding: .85rem; box-shadow: 0 .35rem 1.4rem rgb(23 36 61 / 18%); }
 }

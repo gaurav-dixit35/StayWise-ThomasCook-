@@ -60,19 +60,20 @@ type HotelSort = 'recommended' | 'price-asc' | 'price-desc' | 'rating';
                   </a>
                   <div class="hotel-card__body">
                     <div class="hotel-card__top"><div><p class="location">{{ hotel.city }}, {{ hotel.state }}</p>
+                      @if (criteria().checkIn && hotel.availability?.available === false) { <span class="sold-status">Sold out</span> }
                       <h2><a [routerLink]="['/hotels', hotel.slug]" [queryParams]="queryParams()">{{ hotel.name }}</a></h2></div>
-                      <span class="rating" [attr.aria-label]="hotel.starRating + ' out of 5 stars'">{{ hotel.starRating }} <span aria-hidden="true">★</span></span></div>
+                      <span class="rating" [attr.aria-label]="hotel.starRating + ' out of 5 stars'">@for (star of stars(hotel.starRating); track $index) { <span aria-hidden="true">{{ star ? '★' : '☆' }}</span> }</span></div>
                     <p class="description">{{ hotel.description }}</p>
                     <div class="amenities" aria-label="Amenities">
                       @for (amenity of hotel.amenities.slice(0, 4); track amenity.iconKey) { <span>{{ amenity.name }}</span> }
                       @if (hotel.amenities.length > 4) { <span>+{{ hotel.amenities.length - 4 }} more</span> }
                     </div>
-                    @if (hotel.availability; as availability) { @if (availability.available && availability.roomsLeft <= 3) { <app-badge tone="warning">Only {{ availability.roomsLeft }} rooms left</app-badge> } }
+                    @if (hotel.availability; as availability) { @if (availability.available && availability.roomsLeft <= 3) { <app-badge tone="warning">Only {{ availability.roomsLeft }} {{ availability.roomsLeft === 1 ? 'room' : 'rooms' }} left</app-badge> } }
                   </div>
                   <div class="hotel-card__price">
                     @if (criteria().checkIn && hotel.availability?.available) { <p class="price-label">Total for {{ hotel.availability?.nights }} {{ hotel.availability?.nights === 1 ? 'night' : 'nights' }}</p><strong>{{ hotel.availability?.totalAmount | inr }}</strong><p class="nightly">{{ hotel.pricePerNight | inr }} per night</p> }
                     @else { <p class="price-label">From per night</p><strong class="price-muted">{{ hotel.pricePerNight | inr }}</strong> }
-                    @if (hotel.availability?.available === false && criteria().checkIn) { <span class="sold-status">Sold out</span><a class="view-button view-button--secondary" [routerLink]="['/hotels', hotel.slug]" [queryParams]="queryParams()">See alternatives</a> }
+                    @if (hotel.availability?.available === false && criteria().checkIn) { <a class="view-button view-button--secondary" [routerLink]="['/hotels', hotel.slug]" [queryParams]="queryParams()">See alternatives</a> }
                     @else { <a class="view-button" [routerLink]="['/hotels', hotel.slug]" [queryParams]="queryParams()">View stay</a> }
                   </div>
                   @if (criteria().checkIn && hotel.availability?.available === false) { <app-smart-alternatives class="card-alternatives" [hotelId]="hotel.id" [checkIn]="criteria().checkIn" [checkOut]="criteria().checkOut" [excludeHotelIds]="visibleAvailableIds()" /> }
@@ -116,6 +117,8 @@ export class SearchResultsPage implements OnInit {
     });
   });
   readonly visibleAvailableIds = computed(() => this.filteredHotels().filter((hotel) => hotel.availability?.available).map((hotel) => hotel.id));
+
+  stars(rating: number): boolean[] { return Array.from({ length: 5 }, (_, index) => index < rating); }
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(() => {

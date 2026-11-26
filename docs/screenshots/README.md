@@ -1,6 +1,6 @@
 # StayWise screenshots
 
-These are real browser captures of the local Angular app connected to the Spring API and Docker MySQL database. Desktop captures use Chrome at 1440 × 1000; the mobile home capture uses 390 × 844. Full-page screenshots include content below the viewport.
+These are browser captures of the local Angular production app. Desktop captures use Chrome at 1440 × 1000; the mobile home capture uses 390 × 844. Full-page screenshots include content below the viewport. The latest home, results, and hotel details captures use the live Spring API and local Docker MySQL. Earlier booking and management captures are from the local demo backend.
 
 | Capture | What it shows |
 |---|---|
