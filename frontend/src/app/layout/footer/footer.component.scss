@@ -1,0 +1,13 @@
+:host { display: block; }
+
+.footer { background: var(--navy-deep); color: #f7f5ef; }
+.footer__inner { width: min(100% - 3rem, 75rem); margin-inline: auto; padding-block: 3rem 1.5rem; }
+.footer__brand { max-width: 25rem; }
+.footer__wordmark { display: inline-flex; align-items: center; gap: .65rem; color: white; font-family: 'Playfair Display', Georgia, serif; font-size: 1.45rem; font-weight: 700; text-decoration: none; }
+.footer__wordmark img { object-fit: contain; }
+.footer__brand p { max-width: 25rem; margin: .75rem 0 0; color: #d8dce2; line-height: 1.6; }
+.footer__links { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1.75rem; }
+.footer__links a { min-height: 2.75rem; display: inline-flex; align-items: center; color: #f7f5ef; font-weight: 600; text-decoration-color: var(--gold); text-underline-offset: .3rem; }
+.footer__copyright { margin: 2rem 0 0; padding-top: 1.25rem; border-top: 1px solid rgb(255 255 255 / 17%); color: #d8dce2; font-size: .9rem; }
+
+@media (max-width: 480px) { .footer__inner { width: calc(100% - 2rem); } }

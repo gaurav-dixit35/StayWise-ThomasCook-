@@ -1,0 +1,90 @@
+:host { display: block; }
+
+.header {
+  position: sticky;
+  z-index: 50;
+  top: 0;
+  border-bottom: 1px solid var(--line);
+  background: rgb(255 255 255 / 97%);
+}
+
+.header__inner {
+  width: min(100% - 3rem, 75rem);
+  min-height: 5rem;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  color: var(--navy);
+  text-decoration: none;
+}
+
+.brand__mark {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+}
+
+.brand__mark img { width: 100%; height: 100%; object-fit: contain; }
+
+.brand__word {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.brand__word span:last-child { color: var(--gold-ink); }
+
+.navigation { display: flex; align-items: center; gap: 2.25rem; }
+
+.navigation a {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  color: #39404b;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.navigation a:hover, .navigation .navigation__link--active { color: var(--navy); }
+.navigation .navigation__link--active { box-shadow: inset 0 -2px var(--gold); }
+
+.menu-toggle { display: none; }
+
+@media (max-width: 767px) {
+  .header__inner { width: calc(100% - 2rem); min-height: 4.5rem; }
+  .menu-toggle {
+    width: 2.75rem;
+    height: 2.75rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: .5rem;
+    background: white;
+    color: var(--navy);
+    cursor: pointer;
+  }
+  .navigation {
+    position: absolute;
+    inset: calc(100% + 1px) 0 auto;
+    display: none;
+    align-items: stretch;
+    gap: .25rem;
+    padding: .75rem 1rem 1rem;
+    border-bottom: 1px solid var(--line);
+    background: white;
+  }
+  .navigation--open { display: flex; flex-direction: column; }
+  .navigation a { padding-inline: .75rem; }
+  .navigation .navigation__link--active { box-shadow: inset 3px 0 var(--gold); }
+}

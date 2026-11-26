@@ -1,0 +1,30 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+backend/src/main/resources/application-*.yml
+!backend/src/main/resources/application-example.yml
+
+# Java and Maven
+**/target/
+/.m2/
+/.tmp/
+*.class
+
+# Node and Angular
+**/node_modules/
+**/dist/
+**/.angular/
+npm-debug.log*
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+*.log
+
+# Local generated browser captures
+playwright-report/
+test-results/

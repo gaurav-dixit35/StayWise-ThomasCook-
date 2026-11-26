@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: staywise-backend
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3307/staywise?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Kolkata}
+    username: ${DB_USERNAME:staywise_app}
+    password: ${DB_PASSWORD:change-me-local-only}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Asia/Kolkata
+  flyway:
+    enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+server:
+  port: ${SERVER_PORT:8080}
+staywise:
+  cors:
+    allowed-origin: ${CORS_ALLOWED_ORIGIN:http://localhost:4200}

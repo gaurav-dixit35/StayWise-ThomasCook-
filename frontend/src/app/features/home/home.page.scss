@@ -1,0 +1,25 @@
+:host { display: block; }
+
+.hero { position: relative; display: flex; min-height: clamp(34rem, 68vh, 47rem); align-items: center; overflow: hidden; background: #e9e5db; }
+.hero__visual { position: absolute; inset: 0 0 0 49%; overflow: hidden; }
+.hero__photo { width: 100%; height: 100%; display: block; object-fit: cover; object-position: 55% center; }
+
+.hero__inner { position: relative; z-index: 1; width: min(100% - 3rem, 75rem); margin-inline: auto; padding-block: 5rem; }
+.eyebrow { margin: 0 0 .8rem; color: var(--gold-ink); font-size: .82rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+h1, h2 { color: var(--navy); font-family: 'Playfair Display', Georgia, serif; font-weight: 600; }
+h1 { max-width: 11ch; margin: 0; font-size: clamp(3.3rem, 7.5vw, 6.5rem); line-height: 1.02; }
+h1 span { color: var(--gold-ink); }
+.hero__copy { max-width: 32rem; margin: 1.5rem 0 0; color: #454b54; font-size: 1.2rem; line-height: 1.55; }
+.primary-action { width: fit-content; min-height: 3rem; display: inline-flex; align-items: center; justify-content: center; gap: .75rem; margin-top: 2rem; padding: .75rem 1.25rem; border: 1px solid var(--navy); border-radius: .5rem; background: var(--navy); color: white; font-weight: 700; text-decoration: none; transition: background 180ms ease, transform 180ms ease; }
+.primary-action:hover { transform: translateY(-1px); background: var(--navy-deep); }
+.intro { width: min(100% - 3rem, 75rem); display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: end; margin-inline: auto; padding-block: clamp(4rem, 8vw, 7rem); }
+h2 { margin: 0; font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.14; }
+.intro > p { max-width: 36rem; margin: 0; color: var(--ink-muted); font-size: 1.15rem; line-height: 1.7; }
+
+@media (max-width: 767px) {
+  .hero { min-height: 42rem; align-items: flex-start; }
+  .hero__visual { inset: 50% 0 0; }
+  .hero__inner { width: calc(100% - 2rem); padding-top: 4.5rem; }
+  h1 { font-size: clamp(3.2rem, 14vw, 5rem); }
+  .intro { width: calc(100% - 2rem); grid-template-columns: 1fr; gap: 1.25rem; }
+}
