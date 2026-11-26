@@ -133,7 +133,7 @@ npm test -- --watch=false
 npm run build -- --configuration=production
 ```
 
-The frontend suite covers INR/night formatting, date-range boundaries, interceptor error mapping, and booking-form validation (9 tests). Full browser journeys and Lighthouse/accessibility audits remain to be done.
+The frontend suite covers INR/night formatting, date-range boundaries, interceptor error mapping, and booking-form validation (9 tests). Real Chrome screenshots cover search, sold-out suggestions, hotel details, booking, confirmation, management, and cancellation; see [the screenshots](docs/screenshots/README.md). Lighthouse and assistive-technology audits remain to be done.
 
 ## Project structure
 
@@ -153,7 +153,7 @@ Dates are interpreted in Asia/Kolkata; stays use half-open `[checkIn, checkOut)`
 
 ## Screenshots and demo
 
-The screenshot directory contains capture instructions, not fabricated captures. The implementation environment had no functioning Docker engine or configured headless browser, so the full app could not be run for visual capture. See [docs/screenshots/README.md](docs/screenshots/README.md) for exact capture steps and [docs/demo.md](docs/demo.md) for the 3–4 minute script.
+The screenshot directory contains real captures from the running local stack: Docker MySQL, Spring Boot, Angular, and Chrome. The confirmation and cancellation images use a local `example.test` guest and a booking that was subsequently cancelled. See [docs/screenshots/README.md](docs/screenshots/README.md) and [docs/demo.md](docs/demo.md) for the walkthrough.
 
 ## Time and AI assistance disclosure
 
@@ -161,6 +161,6 @@ Implementation hours were not tracked reliably, so no numeric time estimate is c
 
 ## Verification status and known limits
 
-In the available environment, `mvn verify` passed 15 unit/controller tests and skipped 6 Docker-dependent integration/concurrency checks. `npm test -- --watch=false` passed all 9 tests; the Angular production build succeeded without warnings. `npm audit --omit=dev` reported no production dependency vulnerabilities. A full `npm audit` reports 16 moderate findings in development tooling, primarily Angular CLI's transitive npm package-fetch/signing dependencies; npm offers no non-major fix for the pinned Angular toolchain. The backend could not be checked against a fresh MySQL instance because the local service credentials were unavailable and Docker was not running.
+In the checked environment, `mvn clean verify` passed 21 tests (19 Surefire and 2 Testcontainers concurrency tests), and a separate run repeated each concurrency scenario twice (4 more passes). MySQL migrations V1–V4 ran on fresh test databases and on the Compose database. `npm test -- --watch=false` passed all 9 tests, and the Angular production build passed without warnings. Docker Compose, API health, seeded availability, and the browser booking-to-cancellation journey were also exercised. `npm audit --omit=dev` reported no production dependency vulnerabilities. A full `npm audit` reports 16 moderate findings in development tooling, primarily Angular CLI's transitive npm package-fetch/signing dependencies; npm offers no non-major fix for the pinned Angular toolchain. Lighthouse and assistive-technology audits have not been run.
 
 Payments, authentication, guest counts, multiple room categories, email notifications, reviews, idempotency keys, rate limiting, internationalization, and CI/CD are out of scope. Browser-level accessibility/performance audits and screenshots remain unverified. See [asset credits](docs/CREDITS.md) and [the ER diagram](docs/er-diagram.md).

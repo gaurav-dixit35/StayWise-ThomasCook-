@@ -75,6 +75,8 @@ class BookingServiceIntegrationTest {
         jdbcTemplate.update("UPDATE room_availability SET booked_rooms = 0 WHERE hotel_id = 9 AND stay_date >= ? AND stay_date < ?",
                 checkIn, checkIn.plusDays(2));
         bookingService.createBooking(request(checkIn, checkIn.plusDays(2), "one@example.test"));
+        jdbcTemplate.update("UPDATE room_availability SET booked_rooms = capacity WHERE hotel_id = 9 AND stay_date = ?",
+                checkIn.plusDays(1));
         assertThatThrownBy(() -> bookingService.createBooking(request(checkIn.plusDays(1), checkIn.plusDays(3), "two@example.test")))
                 .isInstanceOf(RoomsUnavailableException.class);
     }

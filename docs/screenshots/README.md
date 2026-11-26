@@ -1,7 +1,18 @@
-# Screenshots
+# StayWise screenshots
 
-The screenshot directory is reserved for visual-review captures. No captures are included with this delivery: the environment has no running MySQL/Docker service and no configured browser automation, so a full app preview could not be rendered honestly. To capture the application locally:
+These are real browser captures of the local Angular app connected to the Spring API and Docker MySQL database. Desktop captures use Chrome at 1440 × 1000; the mobile home capture uses 390 × 844. Full-page screenshots include content below the viewport.
 
-1. Start MySQL and run the backend and frontend using the instructions in the project README.
-2. Open the home page, a searched results page, a hotel detail with available and sold-out dates, the booking form, confirmation, and Manage booking.
-3. Save screenshots here with descriptive filenames and include both desktop and narrow mobile layouts.
+| Capture | What it shows |
+|---|---|
+| [Home, desktop](home-desktop.png) | Search-first landing page and destination content |
+| [Home, mobile](home-mobile.png) | Narrow responsive layout |
+| [Sold-out alternatives](sold-out-alternatives-desktop.png) | Jaipur sold-out case and date/property suggestions |
+| [Hotel details](hotel-details-desktop.png) | Property details, amenities, availability, and quote |
+| [Booking form](booking-desktop.png) | Guest details and reservation summary |
+| [Confirmation](booking-confirmation-desktop.png) | Successful reservation reference and next steps |
+| [Manage booking form](manage-booking-desktop.png) | Reference and email lookup form |
+| [Confirmed booking](manage-booking-confirmed-desktop.png) | Retrieved reservation and cancellation action |
+| [Cancellation dialog](cancellation-dialog-desktop.png) | Cancellation confirmation prompt |
+| [Cancelled booking](booking-cancelled-desktop.png) | Cancelled status after inventory release |
+
+Confirmation and management captures use a local demo reservation created for `capture.guest@example.test`, then cancelled. It does not use a real guest address. The seeded hotel/dates are fictional and relative to the database date.

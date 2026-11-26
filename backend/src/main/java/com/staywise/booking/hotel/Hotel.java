@@ -10,6 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashSet;
@@ -41,6 +43,7 @@ public class Hotel {
     private String description;
 
     @Column(name = "star_rating", nullable = false)
+    @JdbcTypeCode(SqlTypes.TINYINT)
     private int starRating;
 
     @Column(name = "room_type_name", nullable = false, length = 80)

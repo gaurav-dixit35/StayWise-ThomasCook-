@@ -1,7 +1,7 @@
 package com.staywise.booking.booking;
 
 import com.staywise.booking.booking.dto.CreateBookingRequest;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -43,12 +43,12 @@ class ConcurrentBookingIT {
     @Autowired private JdbcTemplate jdbcTemplate;
     @Autowired private Clock clock;
 
-    @Test
+    @RepeatedTest(2)
     void tenConcurrentRequestsForOneRemainingRoomConfirmExactlyOne() throws Exception {
         raceBookingsForCapacity(1, 80);
     }
 
-    @Test
+    @RepeatedTest(2)
     void tenConcurrentRequestsForFiveRoomsConfirmExactlyFive() throws Exception {
         raceBookingsForCapacity(5, 90);
     }
@@ -56,8 +56,9 @@ class ConcurrentBookingIT {
     private void raceBookingsForCapacity(int capacity, int daysAhead) throws Exception {
         LocalDate checkIn = LocalDate.now(clock).plusDays(daysAhead);
         LocalDate checkOut = checkIn.plusDays(2);
+        int alreadyBooked = 5 - capacity;
         jdbcTemplate.update("UPDATE room_availability SET booked_rooms = ? WHERE hotel_id = 9 AND stay_date >= ? AND stay_date < ?",
-                5 - capacity, checkIn, checkOut);
+                alreadyBooked, checkIn, checkOut);
         int initialBookings = Math.toIntExact(bookingRepository.count());
         int attempts = 10;
         var executor = Executors.newFixedThreadPool(attempts);
@@ -93,7 +94,7 @@ class ConcurrentBookingIT {
                 Integer.class, checkIn, checkOut);
         assertThat(succeeded.get()).isEqualTo(capacity);
         assertThat(soldOut.get()).isEqualTo(attempts - capacity);
-        assertThat(booked).isEqualTo(capacity);
+        assertThat(booked).isEqualTo(alreadyBooked + capacity);
         assertThat(bookingRepository.count()).isEqualTo(initialBookings + capacity);
     }
 }

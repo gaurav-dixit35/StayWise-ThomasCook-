@@ -72,7 +72,7 @@ Cancellation first matches normalized reference and trimmed, lowercased email. I
 
 If two requests both read the last room as available and then independently increment a count, both could be confirmed. `PESSIMISTIC_WRITE` locks each requested `room_availability` row until transaction completion. Requests for overlapping stays therefore serialize on shared nights. The query orders dates ascending so different overlapping multi-night requests acquire shared rows in a consistent order, reducing deadlock risk. The transaction checks capacity after it owns the locks; the database check constraint prevents `booked_rooms > capacity` even if another code path is introduced.
 
-The repository includes Testcontainers MySQL integration tests and `ConcurrentBookingIT` for racing requests. These need a working Docker engine; in this environment Docker was unavailable, so they were skipped and their concurrency behavior has not been verified against a live MySQL instance here. The committed test is the intended proof, not a claim of a successful run.
+The repository includes Testcontainers MySQL integration tests and `ConcurrentBookingIT` for racing requests. They were run against MySQL in the checked environment; both race scenarios passed, including repeat runs described in the test section below.
 
 Alternatives have different trade-offs. Optimistic locking with `@Version` needs conflict retries and can cause retry storms around popular dates. An atomic conditional update (`booked_rooms = booked_rooms + 1 WHERE booked_rooms < capacity`) can be efficient but must update every night and undo partial success safely. Redis/distributed locks add an operational dependency and lease/failure semantics. A queue serializes work but increases latency and infrastructure. `SERIALIZABLE` isolation may reduce throughput and cause broader contention. Ordered row locks are easy to reason about for this small MySQL app.
 
@@ -119,15 +119,14 @@ Before production use, add HTTPS, rate limiting and abuse monitoring, email veri
 
 ## 12. Testing strategy
 
-Backend unit/controller coverage includes pricing, date validation, hotel controller responses, booking service behavior, Smart Alternatives, and rolling inventory scheduling. Testcontainers suites cover MySQL transaction/inventory behavior and concurrent booking when Docker is available. The latest `mvn verify` passed 15 unit/controller tests and skipped 6 Docker-dependent checks because no Docker engine was available. Database migrations were not applied to a fresh database in this environment.
+Backend unit/controller coverage includes pricing, date validation, hotel controller responses, booking service behavior, Smart Alternatives, and rolling inventory scheduling. `mvn clean verify` passed 21 tests: 19 Surefire tests and 2 Testcontainers concurrency tests. A separate failsafe run repeated both concurrency scenarios twice, adding 4 passing invocations. Fresh Testcontainers databases applied Flyway migrations V1–V4; the Compose MySQL database also started successfully and received the migrations. The API health endpoint and seeded availability cases were checked, and a browser reservation was created and cancelled against the running app.
 
-Frontend Vitest coverage exercises INR/night-count formatting, date-range boundaries, safe interceptor mapping, and booking form validation (9 tests). Production compilation checks strict Angular templates and emits lazy route chunks. Full browser journeys, cross-browser interaction, and WCAG/Lighthouse targets still need dedicated manual verification. The latest `npm test -- --watch=false` passed all 9 tests; `npm run build -- --configuration=production` passed without build warnings.
+Frontend Vitest coverage exercises INR/night-count formatting, date-range boundaries, safe interceptor mapping, and booking form validation (9 tests). Production compilation checks strict Angular templates and emits lazy route chunks. Chrome screenshots document the browser path from search through cancellation, including a mobile home layout. Cross-browser interaction, screen-reader review, and WCAG/Lighthouse targets still need dedicated verification. `npm test -- --watch=false` passed all 9 tests; `npm run build -- --configuration=production` passed without build warnings.
 
 ## 13. Limitations and future improvements
 
-- No real database-backed or concurrency result is claimed until the integration suite runs with Docker/MySQL.
-- Screenshots and a browser-based visual review were not captured in this environment; see `docs/screenshots/README.md` for exact local steps.
+- Lighthouse, formal WCAG, and screen-reader audits have not been run; screenshots are visual evidence of the documented Chrome flows, not an accessibility certification.
 - Add integration tests for back-to-back stays, cancellation/rebooking, duplicate cancellation, and races, and run them repeatedly on MySQL.
-- Add frontend specs for date constraints, error mapping, booking validation, and key guest journeys; run responsive and assistive-technology checks.
+- Add more frontend specs for date constraints and key guest journeys, then run responsive and assistive-technology checks.
 - Payments, email confirmations, multiple room categories, guest counts, reviews, idempotency keys, rate limiting, internationalization, observability, and CI/CD remain outside the current implementation.
 - Total implementation hours were not tracked reliably, so no numeric estimate is claimed. AI coding assistance was used significantly for implementation, documentation, and test work. The human submitter remains responsible for reviewing and understanding the repository before presenting it.

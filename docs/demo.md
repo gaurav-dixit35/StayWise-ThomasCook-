@@ -22,4 +22,4 @@ This three to four minute walkthrough uses the relative scenarios in `V4__demo_s
 
 ## Screenshots
 
-Screenshots are not included yet. To capture them, start MySQL, the API, and Angular as above, then use a browser screenshot tool at desktop width (1440 px) and mobile width (390 px). Capture the home, search results, sold-out alternatives, hotel details, booking form, confirmation, and manage/cancel states into `docs/screenshots/`. The demo seeds include fictional guest addresses at `example.test`; use newly created bookings for confirmation and cancellation captures.
+Real Chrome captures from the running local stack are in [`docs/screenshots/`](screenshots/README.md). They cover home at desktop and mobile sizes, sold-out alternatives, hotel details, booking, confirmation, lookup, and confirmed/cancelled management states. The confirmation/management journey used a temporary local reservation for `capture.guest@example.test`, which was cancelled after capture.
