@@ -1,166 +1,196 @@
-# StayWise
+<p align="center">
+  <img src="frontend/src/assets/brand/staywise-logo.png" alt="StayWise compass and hotel logo" width="132" />
+</p>
 
-**Thoughtful stays across India.** StayWise helps guests compare fictional hotels, see clear nightly prices, reserve a room, and manage a booking. When dates are sold out, it suggests nearby dates and other stays in the same city.
+<h1 align="center">StayWise</h1>
 
-> Interview/demo project. It does not take payments or provide production account security.
+<p align="center"><strong>Thoughtful stays across India.</strong><br />A hotel discovery and booking portal with clear prices, live availability, and helpful alternatives.</p>
 
-## Features
+<p align="center">
+  <a href="docs/demo.md">Demo walkthrough</a> ·
+  <a href="DESIGN.md">Design notes</a> ·
+  <a href="docs/er-diagram.md">Database diagram</a> ·
+  <a href="docs/CREDITS.md">Asset credits</a>
+</p>
 
-- Search eight Indian destination cities with a keyboard-accessible date range picker.
-- Compare nine fictional properties, amenities, availability, prices, and sort/filter results.
-- View hotel details and backend-calculated quotes.
-- Reserve one room per booking; the backend locks inventory and calculates the final total.
-- Retrieve or cancel a reservation using its reference and booking email.
-- Find same-hotel nearby dates and same-city hotel options when a stay is sold out.
+<p align="center">
+  <a href="docs/screenshots/README.md">Screenshots</a> ·
+  <a href="#quick-start">Quick start</a> ·
+  <a href="#verification">Verification</a>
+</p>
 
-## Technology
+---
 
-| Area | Stack |
-|---|---|
-| Backend | Java 17 language target, Spring Boot 3.5.11, Spring MVC, Spring Data JPA, Bean Validation, Maven Wrapper |
-| Database | MySQL 8.0, InnoDB, Flyway |
-| Frontend | Angular 21 standalone, strict TypeScript, SCSS, RxJS, Vitest |
-| UI assets | Self-hosted Playfair Display and Source Sans 3, Lucide icons, original SVG illustrations |
+<p align="center">
+  <a href="docs/screenshots/home-desktop.png"><img src="docs/screenshots/home-desktop.png" alt="StayWise home page on desktop" width="760" /></a>
+</p>
 
-The checked environment used Java 22, Node 22.15.1, and npm 10.9.2. Angular 21 requires a supported Node release (20.19+, 22.12+, or 24+).
+> **Project demo:** All hotels and reservations are fictional. This app does not process payments and does not provide production account security.
 
-## Prerequisites
+## What you can do
 
-- JDK 17 or newer (Maven Wrapper is included).
-- Node.js 20.19+, 22.12+, or 24+, with npm.
-- Docker Desktop / Docker Engine and Docker Compose, or a local MySQL 8 database.
+- Search stays in eight Indian cities using an accessible date-range picker.
+- Compare nine fictional hotels, amenities, room availability, and nightly prices.
+- View hotel details and server-calculated booking quotes.
+- Reserve one room per booking; the backend locks inventory to protect the last room.
+- Find a reservation or cancel it using its reference and booking email.
+- Continue a sold-out search with nearby dates or available hotels in the same city.
 
 ## Quick start
 
-From the repository root, make the local environment file and start MySQL:
+### Requirements
+
+- Java 17 or newer
+- Node.js 20.19+, 22.12+, or 24+, with npm
+- Docker Desktop / Docker Engine with Docker Compose, or a local MySQL 8 database
+
+### 1. Start the database
+
+From the repository root, copy the example environment file and launch MySQL:
 
 ```powershell
 Copy-Item .env.example .env
 docker compose up -d
 ```
 
-Then run these commands in two separate terminals:
+Compose exposes MySQL on host port `3307`. The `.env` file contains local credentials only; keep real secrets out of version control.
+
+### 2. Start the backend
+
+In a second terminal:
 
 ```powershell
-cd backend; .\mvnw.cmd spring-boot:run
+cd backend
+.\mvnw.cmd spring-boot:run
 ```
+
+Flyway creates the schema and loads the fictional hotel catalog, nightly inventory, and demo availability. The service uses `Asia/Kolkata` for booking dates.
+
+### 3. Start the frontend
+
+In a third terminal:
 
 ```powershell
-cd frontend; npm install; npm start
+cd frontend
+npm install
+npm start
 ```
 
-On macOS/Linux, use `cp .env.example .env`, `./mvnw spring-boot:run`, and `npm install && npm start`. Flyway creates the schema and sample data on backend startup.
+Open the portal at **http://localhost:4200**.
 
-- Portal: <http://localhost:4200>
-- API and Swagger UI: <http://localhost:8080/swagger-ui.html>
-- Health: <http://localhost:8080/actuator/health>
-
-Compose maps container MySQL port 3306 to host port 3307. `.env` supplies Compose credentials. Spring's local defaults match the example; if you customize credentials or port, export the corresponding `DB_URL`, `DB_USERNAME`, and `DB_PASSWORD` values for the backend process. Set `CORS_ALLOWED_ORIGIN` when serving Angular from another origin.
-
-## Manual MySQL setup
-
-Create a database and least-privilege application user in a MySQL 8 administrative session (replace the example password):
-
-```sql
-CREATE DATABASE staywise CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
-CREATE USER 'staywise_app'@'%' IDENTIFIED BY 'replace-with-a-local-password';
-GRANT ALL PRIVILEGES ON staywise.* TO 'staywise_app'@'%';
-```
-
-Set the Spring connection variables in the backend terminal. PowerShell:
-
-```powershell
-$env:DB_URL = 'jdbc:mysql://localhost:3306/staywise?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Kolkata'
-$env:DB_USERNAME = 'staywise_app'
-$env:DB_PASSWORD = 'replace-with-a-local-password'
-```
-
-macOS/Linux shell:
+<details>
+<summary>macOS / Linux commands</summary>
 
 ```sh
-export DB_URL='jdbc:mysql://localhost:3306/staywise?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Kolkata'
-export DB_USERNAME='staywise_app'
-export DB_PASSWORD='replace-with-a-local-password'
+cp .env.example .env
+docker compose up -d
 ```
 
-The configured account must be able to create and alter tables in this application database so Flyway can install the migrations. Do not put real credentials in committed files.
+In separate terminals:
 
-## Migrations and demo data
+```sh
+cd backend && ./mvnw spring-boot:run
+```
 
-Flyway applies `V1__schema.sql` through `V4__demo_scenarios.sql` at API startup. V1 creates the tables and constraints; V2 seeds nine fictional hotels/amenities; V3 creates nightly inventory from today through today +365; V4 books sample rooms to demonstrate availability. A daily Asia/Kolkata scheduler fills missing inventory in the rolling window. To reset the local Compose database and erase its data, run `docker compose down -v` followed by `docker compose up -d`; the migrations then seed a fresh database.
+```sh
+cd frontend && npm install && npm start
+```
 
-Relative to database today, the seeded demo cases are:
+</details>
 
-| Property | Dates | Availability |
-|---|---|---|
-| Aravali Palace Heritage, Jaipur | +21 through +24 days | Sold out (six rooms reserved) |
-| Sea Glass House, Mumbai | +28 through +31 days | One room left |
-| Monsoon Courtyard, Goa | +35 through +38 days | Two rooms left |
+### Local service links
 
-For example, when today is 26 Nov 2026 in Asia/Kolkata, those windows are 17–20 Dec, 24–27 Dec, and 31 Dec–3 Jan respectively. See [the walkthrough](docs/demo.md) for the guided path and Smart Alternatives demo.
+| Service | Address |
+|---|---|
+| StayWise portal | [localhost:4200](http://localhost:4200) |
+| Swagger API docs | [localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html) |
+| Backend health | [localhost:8080/actuator/health](http://localhost:8080/actuator/health) |
+
+## Try the demo scenarios
+
+Seeded availability is relative to the database date, so the cases remain useful over time:
+
+| Hotel | Dates from today | Result |
+|---|---:|---|
+| Aravali Palace Heritage · Jaipur | +21 to +24 days | Sold out; explore alternatives |
+| Sea Glass House · Mumbai | +28 to +31 days | One room left |
+| Monsoon Courtyard · Goa | +35 to +38 days | Two rooms left |
+
+See the [step-by-step walkthrough](docs/demo.md) for the full search, reservation, and cancellation path.
+
+## Technology
+
+| Layer | Tools |
+|---|---|
+| Frontend | Angular 21, TypeScript, SCSS, RxJS, Vitest |
+| Backend | Java 17 target, Spring Boot 3.5.11, Spring MVC, Spring Data JPA, Bean Validation |
+| Database | MySQL 8, InnoDB, Flyway migrations |
+| UI | Lucide icons, self-hosted Playfair Display and Source Sans 3, original SVG hotel art |
+| Testing | JUnit, Testcontainers, Vitest, Chrome, axe-core, Lighthouse |
 
 ## API overview
 
-| Method | Endpoint | Description |
+All API routes use the `/api` prefix.
+
+| Method | Route | Purpose |
 |---|---|---|
-| GET | `/api/cities` | Destination list |
-| GET | `/api/hotels?city=&checkIn=&checkOut=` | Search and availability |
-| GET | `/api/hotels/{id}` or `/api/hotels/slug/{slug}` | Hotel details |
-| GET | `/api/hotels/{id}/quote?checkIn=&checkOut=` | Backend price breakdown |
-| GET | `/api/hotels/{id}/alternatives?checkIn=&checkOut=` | Smart Alternatives |
-| POST | `/api/bookings` | Create a reservation |
-| POST | `/api/bookings/lookup` | Lookup with reference + email |
-| POST | `/api/bookings/cancel` | Cancel with reference + email |
+| `GET` | `/api/cities` | List destination cities |
+| `GET` | `/api/hotels?city=&checkIn=&checkOut=` | Search hotels and availability |
+| `GET` | `/api/hotels/{id}` or `/api/hotels/slug/{slug}` | Hotel details |
+| `GET` | `/api/hotels/{id}/quote` | Get a server-calculated price |
+| `GET` | `/api/hotels/{id}/alternatives` | Find nearby dates and same-city stays |
+| `POST` | `/api/bookings` | Create a reservation |
+| `POST` | `/api/bookings/lookup` | Look up a reservation by reference and email |
+| `POST` | `/api/bookings/cancel` | Cancel a reservation |
 
-See [Swagger UI](http://localhost:8080/swagger-ui.html) while the backend is running. Lookup/cancel use POST bodies to keep email addresses out of URLs. Errors share a JSON contract with status, stable code, safe message, path, timestamp, and optional field errors.
+Lookup and cancellation accept email in the request body so it does not appear in the URL or browser history. See the running [Swagger UI](http://localhost:8080/swagger-ui.html) for request and response schemas.
 
-## Tests and production build
+## Development and verification
 
-From `backend`:
+Run backend checks from `backend`:
 
 ```powershell
-.\mvnw.cmd test
-.\mvnw.cmd verify
+.\mvnw.cmd clean verify
+```
+
+The Maven verification includes unit, controller, MySQL integration, and concurrency tests; Testcontainers requires Docker. To run the concurrency test class separately:
+
+```powershell
 .\mvnw.cmd -Dit.test=ConcurrentBookingIT verify
 ```
 
-The integration and concurrency tests use Testcontainers MySQL and need Docker. `verify` includes unit/controller and integration tests; `-Dit.test=ConcurrentBookingIT` selects the concurrency suite in the failsafe phase.
+Run frontend checks from `frontend`:
 
-From `frontend`:
-
-```powershell
+```sh
 npm test -- --watch=false
 npm run build -- --configuration=production
 ```
 
-The frontend suite covers INR/night formatting, date-range boundaries, interceptor error mapping, and booking-form validation (9 tests). Real Chrome screenshots cover search, sold-out suggestions, hotel details, booking, confirmation, management, and cancellation; see [the screenshots](docs/screenshots/README.md). Lighthouse and assistive-technology audits remain to be done.
+### Latest checked results
 
-## Project structure
+- Backend: **21 tests passed** in `mvn clean verify`; both concurrency cases were also repeated twice, with **4 additional passes**.
+- Frontend: **9 tests passed**; production build succeeded.
+- Browser: booking, confirmation, lookup, and cancellation journey completed in Chrome.
+- Accessibility: axe-core reported **0 violations** on desktop home, search results, and hotel details.
+- Lighthouse: **100 accessibility**, **96 best practices**, **70 performance** on the production build. Performance is a local diagnostic score; the test server does not reproduce production hosting, compression, or caching.
+- Dependencies: `npm audit --omit=dev` found **0 production vulnerabilities**. Full audit reports **16 moderate development-tool findings** in the Angular CLI dependency tree; npm's suggested remediation downgrades Angular CLI to 16, so it was not applied to this Angular 21 project.
+
+## Project map
 
 ```text
-backend/src/main/java/com/staywise/booking/  Spring features and API
-backend/src/main/resources/db/migration/    MySQL schema and demo seeds
-backend/src/test/java/                      Unit, controller, integration, concurrency tests
-frontend/src/app/                            Lazy Angular routes, services, and shared UI
-frontend/src/assets/                         Logo, fonts, and original illustrations
-docs/                                        Demo script, credits, ER diagram, screenshots note
-DESIGN.md                                    Engineering decisions and limitations
+backend/                 Spring Boot API, domain services, migrations, tests
+frontend/                Angular application, assets, and frontend tests
+docs/demo.md              Guided product walkthrough
+docs/screenshots/         Desktop and mobile app captures
+docs/er-diagram.md        Database entity relationship diagram
+docs/CREDITS.md           Logo and illustration credits
+DESIGN.md                 Architecture, decisions, trade-offs, and limits
 ```
 
-## Assumptions and design
+## Product rules and scope
 
-Dates are interpreted in Asia/Kolkata; stays use half-open `[checkIn, checkOut)` nights; check-in is allowed today, maximum stay is 30 nights, and maximum advance is 365 days. INR is the only currency. One booking reserves one room, totals exclude taxes/fees, and cancellation is allowed before check-in. See [DESIGN.md](DESIGN.md) for architecture, transaction and concurrency reasoning, privacy, trade-offs, and limitations.
+Stays use the half-open interval `[checkIn, checkOut)`: checkout day is not charged as a night. Check-in is allowed today; stays are 1–30 nights and can be booked up to 365 days ahead. Prices are in INR and calculated as nightly rate × nights, with no taxes or fees. Each reservation books one room and may be cancelled before check-in.
 
-## Screenshots and demo
+This is a portfolio/demo project. Authentication, payments, email notifications, guest counts, multiple room types, reviews, rate limiting, and CI/CD are outside the current scope. Screen-reader testing and performance measurement on a production host have not been performed. AI coding assistance was used; implementation time was not tracked.
 
-The screenshot directory contains real captures from the running local stack: Docker MySQL, Spring Boot, Angular, and Chrome. The confirmation and cancellation images use a local `example.test` guest and a booking that was subsequently cancelled. See [docs/screenshots/README.md](docs/screenshots/README.md) and [docs/demo.md](docs/demo.md) for the walkthrough.
-
-## Time and AI assistance disclosure
-
-Implementation hours were not tracked reliably, so no numeric time estimate is claimed. AI coding assistance was used significantly for code, tests, and documentation. The human submitter is responsible for reviewing and understanding the implementation before presenting it; this repository does not claim that review has already happened.
-
-## Verification status and known limits
-
-In the checked environment, `mvn clean verify` passed 21 tests (19 Surefire and 2 Testcontainers concurrency tests), and a separate run repeated each concurrency scenario twice (4 more passes). MySQL migrations V1–V4 ran on fresh test databases and on the Compose database. `npm test -- --watch=false` passed all 9 tests, and the Angular production build passed without warnings. Docker Compose, API health, seeded availability, and the browser booking-to-cancellation journey were also exercised. `npm audit --omit=dev` reported no production dependency vulnerabilities. A full `npm audit` reports 16 moderate findings in development tooling, primarily Angular CLI's transitive npm package-fetch/signing dependencies; npm offers no non-major fix for the pinned Angular toolchain. Lighthouse and assistive-technology audits have not been run.
-
-Payments, authentication, guest counts, multiple room categories, email notifications, reviews, idempotency keys, rate limiting, internationalization, and CI/CD are out of scope. Browser-level accessibility/performance audits and screenshots remain unverified. See [asset credits](docs/CREDITS.md) and [the ER diagram](docs/er-diagram.md).
+For technical detail, see [DESIGN.md](DESIGN.md), [asset credits](docs/CREDITS.md), and the [demo walkthrough](docs/demo.md).

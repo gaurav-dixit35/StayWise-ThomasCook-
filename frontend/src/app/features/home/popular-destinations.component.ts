@@ -19,7 +19,7 @@ const art: Record<string, { title: string; image: string; line: string }> = {
         <div class="heading"><div><p class="eyebrow">Places worth taking your time</p><h2 id="destinations-title">A few good places to begin</h2></div><p>Discover a handful of India's eight destination cities.</p></div>
         <div class="cards">
           @for (city of featuredCities(); track city.name) {
-            <button class="destination-card" type="button" (click)="search(city.name)" [attr.aria-label]="'Explore stays in ' + city.name">
+            <button class="destination-card" type="button" (click)="search(city.name)">
               <img [src]="artwork(city.name).image" [alt]="''" width="520" height="360" loading="lazy" />
               <span class="destination-card__copy"><small>{{ city.state }}</small><strong>{{ city.name }}</strong><span>{{ artwork(city.name).line }}</span></span>
             </button>
