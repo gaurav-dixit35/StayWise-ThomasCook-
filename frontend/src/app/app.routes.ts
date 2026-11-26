@@ -16,6 +16,7 @@ export const routes: Routes = [
         title: 'Explore hotels | StayWise',
         loadComponent: () => import('./features/search-results/search-results.page').then((page) => page.SearchResultsPage),
       },
+      { path: 'credits', title: 'Image credits | StayWise', loadComponent: () => import('./features/credits/credits.page').then((page) => page.CreditsPage) },
       {
         path: 'hotels/:id',
         title: 'Hotel details | StayWise',

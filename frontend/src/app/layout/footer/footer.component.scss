@@ -9,5 +9,6 @@
 .footer__links { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1.75rem; }
 .footer__links a { min-height: 2.75rem; display: inline-flex; align-items: center; color: #f7f5ef; font-weight: 600; text-decoration-color: var(--gold); text-underline-offset: .3rem; }
 .footer__copyright { margin: 2rem 0 0; padding-top: 1.25rem; border-top: 1px solid rgb(255 255 255 / 17%); color: #d8dce2; font-size: .9rem; }
+.footer__disclaimer { margin:1.25rem 0 0;color:#d8dce2;font-size:.9rem; }
 
 @media (max-width: 480px) { .footer__inner { width: calc(100% - 2rem); } }

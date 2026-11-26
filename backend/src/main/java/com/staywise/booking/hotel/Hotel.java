@@ -58,6 +58,9 @@ public class Hotel {
     @Column(name = "image_url", nullable = false, length = 255)
     private String imageUrl;
 
+    @Column(name = "image_focus", nullable = false, length = 20)
+    private String imageFocus = "center";
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "hotel_amenities",
             joinColumns = @JoinColumn(name = "hotel_id"),
@@ -79,6 +82,7 @@ public class Hotel {
     public BigDecimal getPricePerNight() { return pricePerNight; }
     public int getTotalRooms() { return totalRooms; }
     public String getImageUrl() { return imageUrl; }
+    public String getImageFocus() { return imageFocus; }
     public Set<Amenity> getAmenities() { return Set.copyOf(amenities); }
 
     public void setAmenities(Set<Amenity> amenities) {

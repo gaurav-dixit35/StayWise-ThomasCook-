@@ -12,6 +12,8 @@ public record HotelSummaryDto(
         int starRating,
         String description,
         String imageUrl,
+        String imageAlt,
+        String imageFocus,
         List<AmenityDto> amenities,
         String roomTypeName,
         BigDecimal pricePerNight,

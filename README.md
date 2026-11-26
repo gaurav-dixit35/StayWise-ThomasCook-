@@ -10,7 +10,8 @@
   <a href="docs/demo.md">Demo walkthrough</a> ·
   <a href="DESIGN.md">Design notes</a> ·
   <a href="docs/er-diagram.md">Database diagram</a> ·
-  <a href="docs/CREDITS.md">Asset credits</a>
+  <a href="docs/CREDITS.md">Image credits</a> ·
+  <a href="docs/IMAGE_SOURCING.md">Image workflow</a>
 </p>
 
 <p align="center">
@@ -25,7 +26,7 @@
   <a href="docs/screenshots/home-desktop.png"><img src="docs/screenshots/home-desktop.png" alt="StayWise home page on desktop" width="760" /></a>
 </p>
 
-> **Project demo:** All hotels and reservations are fictional. This app does not process payments and does not provide production account security.
+> **Project demo:** StayWise is a demonstration project. Hotel names are fictional and images are illustrative. This app does not process payments and does not provide production account security.
 
 ## What you can do
 
@@ -125,7 +126,7 @@ See the [step-by-step walkthrough](docs/demo.md) for the full search, reservatio
 | Frontend | Angular 21, TypeScript, SCSS, RxJS, Vitest |
 | Backend | Java 17 target, Spring Boot 3.5.11, Spring MVC, Spring Data JPA, Bean Validation |
 | Database | MySQL 8, InnoDB, Flyway migrations |
-| UI | Lucide icons, self-hosted Playfair Display and Source Sans 3, original SVG hotel art |
+| UI | Lucide icons, self-hosted Playfair Display and Source Sans 3, responsive Wikimedia/Unsplash photography |
 | Testing | JUnit, Testcontainers, Vitest, Chrome, axe-core, Lighthouse |
 
 ## API overview
@@ -164,15 +165,17 @@ Run frontend checks from `frontend`:
 ```sh
 npm test -- --watch=false
 npm run build -- --configuration=production
+npm run images:process
 ```
 
 ### Latest checked results
 
-- Backend: **21 tests passed** in `mvn clean verify`; both concurrency cases were also repeated twice, with **4 additional passes**.
-- Frontend: **9 tests passed**; production build succeeded.
+- Backend: **15 non-container unit/controller tests passed** on this pass. `mvn clean verify` compiled the updated application and passed its first three tests, then stalled when Testcontainers tried to connect to Docker; the complete Maven verification could not finish in this environment.
+- Frontend: **9 tests passed** and `npm run build -- --configuration=production` succeeded after the image update.
 - Browser: booking, confirmation, lookup, and cancellation journey completed in Chrome.
 - Accessibility: axe-core reported **0 violations** on desktop home, search results, and hotel details.
-- Lighthouse: **100 accessibility**, **96 best practices**, **70 performance** on the production build. Performance is a local diagnostic score; the test server does not reproduce production hosting, compression, or caching.
+- Lighthouse: **64 performance, 100 accessibility, 96 best practices, 100 SEO** on the production build in the local static server. The performance target of 85 was not met; the local server does not reproduce production compression, caching, or hosting.
+- Docker/Testcontainers were not available to the Maven test JVM during this pass; the complete integration suite and a fresh database migration could not be verified here.
 - Dependencies: `npm audit --omit=dev` found **0 production vulnerabilities**. Full audit reports **16 moderate development-tool findings** in the Angular CLI dependency tree; npm's suggested remediation downgrades Angular CLI to 16, so it was not applied to this Angular 21 project.
 
 ## Project map
@@ -183,7 +186,7 @@ frontend/                Angular application, assets, and frontend tests
 docs/demo.md              Guided product walkthrough
 docs/screenshots/         Desktop and mobile app captures
 docs/er-diagram.md        Database entity relationship diagram
-docs/CREDITS.md           Logo and illustration credits
+docs/CREDITS.md           Photo credits and licenses
 DESIGN.md                 Architecture, decisions, trade-offs, and limits
 ```
 
@@ -193,4 +196,4 @@ Stays use the half-open interval `[checkIn, checkOut)`: checkout day is not char
 
 This is a portfolio/demo project. Authentication, payments, email notifications, guest counts, multiple room types, reviews, rate limiting, and CI/CD are outside the current scope. Screen-reader testing and performance measurement on a production host have not been performed. AI coding assistance was used; implementation time was not tracked.
 
-For technical detail, see [DESIGN.md](DESIGN.md), [asset credits](docs/CREDITS.md), and the [demo walkthrough](docs/demo.md).
+For technical detail, see [DESIGN.md](DESIGN.md), [image credits](docs/CREDITS.md), the [image sourcing and replacement guide](docs/IMAGE_SOURCING.md), and the [demo walkthrough](docs/demo.md). The running app also provides an **Image credits** link in its footer.

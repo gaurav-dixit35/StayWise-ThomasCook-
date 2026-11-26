@@ -32,7 +32,7 @@ class HotelControllerTest {
     void searchReturnsHotelSummariesAsJson() throws Exception {
         when(hotelService.search(isNull(), isNull(), isNull())).thenReturn(List.of(
                 new HotelSummaryDto(1, "sea-glass-house", "Sea Glass House", "Mumbai", "Maharashtra", 4,
-                        "A calm coastal residence.", "/assets/hotels/sea-glass-house.svg", List.of(),
+                        "A calm coastal residence.", "/assets/images/processed/hotels/sea-glass-house-1.jpg", "Sea Glass House in Mumbai", "center", List.of(),
                         "Harbour Deluxe Room", new BigDecimal("7800.00"), null)));
 
         mvc.perform(get("/api/hotels"))

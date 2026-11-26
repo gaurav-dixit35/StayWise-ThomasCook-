@@ -9,11 +9,13 @@ backend/src/main/resources/application-*.yml
 **/target/
 /.m2/
 /.tmp/
+/.npm-cache/
 *.class
 
 # Node and Angular
 **/node_modules/
 **/dist/
+frontend/src/assets/images/source/
 **/.angular/
 npm-debug.log*
 

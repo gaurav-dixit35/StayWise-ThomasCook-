@@ -11,12 +11,13 @@ import { NightsPipe } from '../../shared/pipes/nights.pipe';
 import { BadgeComponent } from '../../shared/ui/badge/badge.component';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { SmartAlternativesComponent } from '../../shared/ui/smart-alternatives/smart-alternatives.component';
+import { SwImageComponent } from '../../shared/ui/sw-image/sw-image.component';
 
 @Component({
   selector: 'app-booking-page',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink, InrPipe, NightsPipe,
-    BadgeComponent, ButtonComponent, SmartAlternativesComponent],
+    BadgeComponent, ButtonComponent, SmartAlternativesComponent, SwImageComponent],
   template: `
     @if (loading()) {
       <div class="booking-status" role="status">Preparing your reservation…</div>
@@ -46,7 +47,7 @@ import { SmartAlternativesComponent } from '../../shared/ui/smart-alternatives/s
               <p class="form-note">By confirming, you agree to the stay dates shown in your summary. No payment is collected.</p>
             </form>
             <aside class="summary-card" aria-labelledby="summary-title">
-              <img [src]="hotel()!.imageUrl" [alt]="hotel()!.name + ', ' + hotel()!.city" width="560" height="320" (error)="fallbackImage($event)" />
+              <sw-image [src]="hotel()!.imageUrl" [alt]="hotel()!.imageAlt" [focus]="hotel()!.imageFocus" width="560" height="320" sizes="560px" />
               <div class="summary-card__content">
                 <p class="eyebrow">Your stay</p><h2 id="summary-title">{{ hotel()!.name }}</h2>
                 <p>{{ hotel()!.city }}, {{ hotel()!.state }} · {{ hotel()!.roomTypeName }}</p>
@@ -169,8 +170,4 @@ export class BookingPage implements OnInit {
     });
   }
 
-  fallbackImage(event: Event): void {
-    const image = event.target;
-    if (image instanceof HTMLImageElement) image.src = 'assets/hotels/sea-glass-house.svg';
-  }
 }

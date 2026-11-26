@@ -1,14 +1,23 @@
 :host { position: relative; z-index: 5; display: block; width: min(100% - 3rem, 75rem); margin: -2.5rem auto 0; }
 .search { display: grid; grid-template-columns: minmax(12rem, 1fr) minmax(19rem, 1.35fr) auto; gap: .85rem; align-items: end; padding: 1rem; border: 1px solid #e5e2dc; border-radius: .85rem; background: white; box-shadow: 0 .75rem 2rem rgb(23 36 61 / 12%); }
-.destination, .dates { min-width: 0; display: grid; gap: .35rem; }
+.destination, .dates { min-width:0;display:grid;grid-template-rows:1.2rem 3.5rem;gap:.35rem;align-content:end; }
 .field-label { color: #4e5560; font-size: .82rem; font-weight: 700; }
-.destination input { width: 100%; min-height: 3.25rem; padding: .6rem .75rem; border: 1px solid var(--line); border-radius: .5rem; background: white; color: var(--ink); }
+.destination input { width: 100%;height:3.5rem;padding:.6rem .75rem;border:1px solid var(--line);border-radius:.5rem;background:white;color:var(--ink); }
+.destination .field-label { grid-row:1; }
+.destination input { grid-row:2; }
+.dates app-date-range-picker { height:3.5rem; }
+.dates .field-label { grid-row:1; }
+.dates app-date-range-picker { grid-row:2; }
+.dates .field-label { grid-row:1; }
+.dates app-date-range-picker { grid-row:2; }
+:host(.compact) .destination,:host(.compact) .dates { grid-template-rows:1.2rem 2.9rem; }
+:host(.compact) .dates app-date-range-picker { height:2.9rem; }
 app-button { align-self: end; }
 .form-message { grid-column: 1 / -1; margin: 0; color: #8b3028; font-size: .9rem; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
 :host(.compact) { width: min(100% - 3rem, 75rem); margin: 0 auto; }
 :host(.compact) .search { grid-template-columns: minmax(10rem, 1fr) minmax(18rem, 1.2fr) auto; gap: .6rem; padding: .65rem; border-radius: .65rem; box-shadow: 0 .25rem 1rem rgb(23 36 61 / 8%); }
-:host(.compact) .destination input { min-height: 2.9rem; }
+:host(.compact) .destination input { height:2.9rem; }
 
 @media (max-width: 767px) {
   :host { width: calc(100% - 2rem); margin-top: -1.25rem; }

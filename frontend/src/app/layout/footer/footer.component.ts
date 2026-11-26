@@ -18,7 +18,9 @@ import { RouterLink } from '@angular/router';
         <nav class="footer__links" aria-label="Footer navigation">
           <a routerLink="/hotels">Explore hotels</a>
           <a routerLink="/manage-booking">Manage a booking</a>
+          <a routerLink="/credits">Image credits</a>
         </nav>
+        <p class="footer__disclaimer">StayWise is a demonstration project. Hotel names are fictional and images are illustrative.</p>
         <p class="footer__copyright">© 2026 StayWise. Made for journeys across India.</p>
       </div>
     </footer>

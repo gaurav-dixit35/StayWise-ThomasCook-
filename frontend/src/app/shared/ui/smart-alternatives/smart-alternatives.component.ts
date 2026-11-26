@@ -5,11 +5,12 @@ import { AlternativesResponse } from '../../../core/models/alternatives.model';
 import { HotelApiService } from '../../../core/services/hotel-api.service';
 import { SearchStateService } from '../../../core/services/search-state.service';
 import { InrPipe } from '../../pipes/inr.pipe';
+import { SwImageComponent } from '../sw-image/sw-image.component';
 
 @Component({
   selector: 'app-smart-alternatives',
   standalone: true,
-  imports: [CommonModule, RouterLink, InrPipe],
+  imports: [CommonModule, RouterLink, InrPipe, SwImageComponent],
   template: `
     @if (loading()) {
       <section class="alternatives" aria-live="polite"><p>Looking for nearby options…</p></section>
@@ -19,7 +20,7 @@ import { InrPipe } from '../../pipes/inr.pipe';
       <section class="alternatives" aria-labelledby="alternatives-title">
         <div class="alternatives__intro">
           <p class="eyebrow">A helpful next step</p>
-          <h2 id="alternatives-title">Sold out for these dates. Here is what works instead.</h2>
+          <h2 id="alternatives-title">Here is what works instead</h2>
         </div>
         @if (options.nearbyDates.length) {
           <div class="group">
@@ -41,7 +42,7 @@ import { InrPipe } from '../../pipes/inr.pipe';
               @for (hotel of options.otherHotels; track hotel.hotelId) {
                 <a class="hotel-option" [routerLink]="['/hotels', hotel.slug]"
                    [queryParams]="{ checkIn: checkIn(), checkOut: checkOut() }">
-                  <img [src]="hotel.imageUrl" [alt]="hotel.name + ', ' + hotel.city" width="112" height="80" loading="lazy" (error)="fallbackImage($event)" />
+                  <sw-image [src]="hotel.imageUrl" [alt]="hotel.name + ', ' + hotel.city" width="112" height="80" sizes="112px" />
                   <span class="hotel-option__details"><strong>{{ hotel.name }}</strong><small>{{ hotel.city }} · {{ hotel.roomsLeft }} rooms left</small></span>
                   <strong class="hotel-option__price">{{ hotel.totalAmount | inr }}</strong>
                 </a>
@@ -61,6 +62,7 @@ export class SmartAlternativesComponent implements OnChanges {
   readonly hotelId = input.required<number>();
   readonly checkIn = input.required<string>();
   readonly checkOut = input.required<string>();
+  readonly excludeHotelIds = input<number[]>([]);
   private readonly hotels = inject(HotelApiService);
   private readonly searchState = inject(SearchStateService);
   readonly loading = signal(false);
@@ -76,7 +78,7 @@ export class SmartAlternativesComponent implements OnChanges {
     this.loading.set(true);
     this.error.set(false);
     this.hotels.alternatives(this.hotelId(), this.checkIn(), this.checkOut()).subscribe({
-      next: (result) => this.result.set(result),
+      next: (result) => this.result.set({ ...result, otherHotels: result.otherHotels.filter((hotel) => !this.excludeHotelIds().includes(hotel.hotelId)) }),
       error: () => { this.result.set(null); this.error.set(true); this.loading.set(false); },
       complete: () => this.loading.set(false),
     });
@@ -87,8 +89,4 @@ export class SmartAlternativesComponent implements OnChanges {
     void this.searchState.search({ city, checkIn, checkOut });
   }
 
-  fallbackImage(event: Event): void {
-    const image = event.target;
-    if (image instanceof HTMLImageElement) image.src = 'assets/hotels/sea-glass-house.svg';
-  }
 }

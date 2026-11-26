@@ -22,13 +22,15 @@ public class HotelService {
     private final AvailabilityRepository availabilityRepository;
     private final PricingService pricingService;
     private final DateRangeValidator dateRangeValidator;
+    private final HotelImageRepository hotelImageRepository;
 
     public HotelService(HotelRepository hotelRepository, AvailabilityRepository availabilityRepository,
-                        PricingService pricingService, DateRangeValidator dateRangeValidator) {
+                        PricingService pricingService, DateRangeValidator dateRangeValidator, HotelImageRepository hotelImageRepository) {
         this.hotelRepository = hotelRepository;
         this.availabilityRepository = availabilityRepository;
         this.pricingService = pricingService;
         this.dateRangeValidator = dateRangeValidator;
+        this.hotelImageRepository = hotelImageRepository;
     }
 
     public List<HotelSummaryDto> search(String city, LocalDate checkIn, LocalDate checkOut) {
@@ -61,13 +63,14 @@ public class HotelService {
 
     private HotelSummaryDto summary(Hotel hotel, LocalDate checkIn, LocalDate checkOut) {
         return new HotelSummaryDto(hotel.getId(), hotel.getSlug(), hotel.getName(), hotel.getCity(), hotel.getState(),
-                hotel.getStarRating(), hotel.getDescription(), hotel.getImageUrl(), amenities(hotel),
+                hotel.getStarRating(), hotel.getDescription(), hotel.getImageUrl(), hotel.getName() + " in " + hotel.getCity(), hotel.getImageFocus(), amenities(hotel),
                 hotel.getRoomTypeName(), hotel.getPricePerNight(), availability(hotel, checkIn, checkOut));
     }
 
     private HotelDetailDto detail(Hotel hotel, LocalDate checkIn, LocalDate checkOut) {
         return new HotelDetailDto(hotel.getId(), hotel.getSlug(), hotel.getName(), hotel.getCity(), hotel.getState(),
-                hotel.getAddress(), hotel.getStarRating(), hotel.getDescription(), hotel.getImageUrl(), amenities(hotel),
+                hotel.getAddress(), hotel.getStarRating(), hotel.getDescription(), hotel.getImageUrl(), hotel.getName() + " in " + hotel.getCity(), hotel.getImageFocus(),
+                hotelImageRepository.findByHotelIdOrderBySortOrder(hotel.getId()).stream().map(image -> new com.staywise.booking.hotel.dto.HotelImageDto(image.getImageUrl(), image.getAltText(), image.getCreditName(), image.getCreditUrl(), image.getLicense())).toList(), amenities(hotel),
                 hotel.getRoomTypeName(), hotel.getPricePerNight(), availability(hotel, checkIn, checkOut));
     }
 

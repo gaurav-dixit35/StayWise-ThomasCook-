@@ -19,6 +19,8 @@ export interface HotelSummary {
   starRating: number;
   description: string;
   imageUrl: string;
+  imageAlt: string;
+  imageFocus: string;
   amenities: Amenity[];
   roomTypeName: string;
   pricePerNight: number;
@@ -27,7 +29,10 @@ export interface HotelSummary {
 
 export interface HotelDetail extends HotelSummary {
   address: string;
+  images: HotelImage[];
 }
+
+export interface HotelImage { url: string; alt: string; creditName: string; creditUrl: string; license: string; }
 
 export interface City {
   name: string;
